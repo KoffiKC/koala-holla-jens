@@ -24,6 +24,8 @@ function setupClickListeners() {
     };
     // call saveKoala with the new obejct
     saveKoala( koalaToSend );
+
+    
   }); 
 }
 
@@ -39,6 +41,7 @@ function getKoalas(){
   }).catch(function(error){
     console.log('error in GET', error);
   });
+  $('#viewKoalas').on('click', '.mark-ready-btn', transferKoala)
 } // end getKoalas
 
 function saveKoala( newKoala ){
@@ -68,26 +71,27 @@ function renderKoalas(koalas) {
     let koala = koalas[i];
     
     // For each koala, append a new row to our table
-     if (koala.ready_to_transfer === true){ 
+     if (koala.ready === true){ 
       $('#viewKoalas').append(`
-        <tr data-boolean = ${koala.ready_to_transfer} data-id = ${koala.id}>
+        <tr data-boolean = ${koala.ready} data-id = ${koala.id}>
           <td>${koala.name}</td>
           <td>${koala.gender}</td>
           <td>${koala.age}</td>
-          <td>${koala.ready_to_transfer}</td>
+          <td>${koala.ready}</td>
           <td>${koala.notes}</td>
           <td>
           </td>
         </tr>
       `);
+      
   }
-    else if(koala.ready_to_transfer === false){
+    else if(koala.ready === false){
       $('#viewKoalas').append(`
-      <tr data-boolean = ${koala.ready_to_transfer} data-id = ${koala.id}>
+      <tr data-boolean = ${koala.ready} data-id = ${koala.id}>
         <td>${koala.name}</td>
         <td>${koala.gender}</td>
         <td>${koala.age}</td>
-        <td>${koala.ready_to_transfer}</td>
+        <td>${koala.ready}</td>
         <td>${koala.notes}</td>
         <td><button class="mark-ready-btn">MARK AS READY</button></td>
       </tr>
@@ -98,8 +102,9 @@ function renderKoalas(koalas) {
 
 function  transferKoala() {
   console.log('CLICK');
-  let boolean = $(this).closest('tr').data().ready_to_transfer;
+  let boolean = $(this).closest('tr').data().boolean;
   let id = $(this).closest('tr').data().id;
+  console.log(id);
   console.log(boolean);
   // let markRead = $(this).closest('tr').text();
   // console.log(read);
@@ -115,7 +120,7 @@ function  transferKoala() {
       }
   })
   .then(function(response) {
-      refreshBooks();
+    getKoalas();
   })
   .catch(function(err) {
       console.log(err);
