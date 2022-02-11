@@ -30,7 +30,7 @@ koalaRouter.post('/', (req, res) => {
     
 
     let sqlText = `
-    INSERT INTO "koala" ("name", "age", "gender", "ready_to_transfer", "notes") 
+    INSERT INTO "koala" ("name", "age", "gender", "ready", "notes") 
     VALUES ( $1, $2, $3, $4, $5);`
     
     let koalaStuff = [koala.name, koala.age, koala.gender, koala.readyForTransfer, koala.notes]
@@ -48,22 +48,15 @@ koalaRouter.post('/', (req, res) => {
 koalaRouter.put('/:id', (req, res) => {
     let idToUpdate = req.params.id;
     console.log(idToUpdate);
-    console.log(req.body);
+    console.log(req.body.boolean);
    
   
     let sqlText = '';
   
-    if(req.body === true) {
-     sqlText = `
-      UPDATE "koala" 
-      SET "ready_to_transfer" = false
-      WHERE "id" = $1;
-    `
-    }
-    else if (req.body === false) {
+    if (req.body.boolean === 'false') {
      sqlText = `
      UPDATE "koala" 
-     SET "ready_to_transfer" = true
+     SET "ready" = 'true'
      WHERE "id" = $1;
     ` 
     } 
